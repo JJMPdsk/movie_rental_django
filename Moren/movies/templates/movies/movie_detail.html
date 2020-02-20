@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block body_block %}
+    <h2>{{ movie.name }}</h2>
+    <hr/>
+
+    <a class="btn btn-dark" href="{% url 'movies:update' movie.pk %}">Edit</a>
+    <a class="btn btn-dark" href="{% url 'movies:delete' movie.pk %}">Delete</a>
+    <a class="btn btn-dark" href="{% url 'movies:rent' movie.pk %}">Rent</a>
+
+    <div class="mt-4">
+        <p>Release date: {{ movie.release_date|date:"d E Y" }}</p>
+        <p>Genre: {{ movie.genre }}</p>
+        <p>In stock: {{ movie.quantity }}</p>
+    </div>
+{% endblock body_block %}

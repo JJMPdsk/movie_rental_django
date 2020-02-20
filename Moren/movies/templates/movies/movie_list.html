@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block body_block %}
+    <h2>Movies</h2>
+    <hr/>
+    <a class="btn btn-dark" href="{% url 'movies:create' %}">Create</a> <br/>
+
+    <div class="row">
+        <div class="mt-4 col-5">
+            {% for movie in movie_list %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ movie.name }}</h5>
+                        <h6 class="card-subtitle text-muted">{{ movie.genre }}</h6>
+                        <h6 class="card-subtitle text-muted mt-1">{{ movie.release_date|date:"d E Y" }}</h6>
+                        <hr/>
+                        <a href="{% url 'movies:detail' movie.pk %}" class="col-3 card-link btn btn-dark">Details</a>
+                        <a href="{% url 'movies:update' movie.pk %}" class="col-3 card-link btn btn-dark">Edit</a>
+                        <a href="{% url 'movies:delete' movie.pk %}" class="col-3 card-link btn btn-dark">Delete</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock body_block %}

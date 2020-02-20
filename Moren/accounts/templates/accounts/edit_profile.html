@@ -1,0 +1,22 @@
+{% extends "base.html" %} 
+{% load bootstrap4 %} 
+{% block body_block %}
+<div class="row justify-content-center">
+  <div class="col-6">
+    <h1>Edit profile</h1>
+    <form method="post">
+      {% csrf_token %} {% bootstrap_form form %}
+      <div class="row">
+        <div class="col">
+          <input class="btn btn-dark col-auto" type="submit" value="Submit" />
+          <a
+            class="btn btn-dark col-auto"
+            href="{% url 'accounts:change_password' %}"
+            >Change password</a
+          >
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock body_block %}

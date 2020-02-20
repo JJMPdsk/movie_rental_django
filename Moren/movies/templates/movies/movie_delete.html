@@ -1,0 +1,11 @@
+{% extends "base.html" %} 
+{% block body_block %} 
+{% load bootstrap4 %} 
+{{ form.media }}
+
+  <form action="{% url 'movies:delete' pk=movie.pk %}" method="post">
+    {% csrf_token %} 
+    <h4>Are you sure you want delete "{{ movie }}"?</h4>
+    <input class="btn btn-dark" type="submit" value="Delete" />
+  </form>
+{% endblock body_block %}

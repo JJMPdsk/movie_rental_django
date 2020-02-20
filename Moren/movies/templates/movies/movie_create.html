@@ -1,0 +1,17 @@
+{% extends "base.html" %} 
+{% block body_block %} 
+{% load bootstrap4 %} 
+{{ form.media }}
+
+<h2>New movie</h2>
+<hr/>
+
+<div class="row">
+  <div class="col-6">
+    <form action="{% url 'movies:create' %}" method="post">
+      {% csrf_token %} {% bootstrap_form form %}
+      <input class="btn btn-dark" type="submit" value="Submit" />
+    </form>
+  </div>
+</div>
+{% endblock body_block %}
