@@ -23,3 +23,6 @@ class Role(models.Model):
 class AppUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     roles = models.ManyToManyField(Role)
+
+    def __str__(self):
+        return self.user.username
