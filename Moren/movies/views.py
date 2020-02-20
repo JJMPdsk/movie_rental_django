@@ -1,12 +1,13 @@
 from django.shortcuts import render, get_object_or_404
 from movies.models import Movie, Rental, Genre
-from django.views.generic import CreateView, UpdateView, DetailView, ListView, DeleteView, FormView, RedirectView
+from django.views.generic import CreateView, DetailView, ListView, DeleteView, FormView, RedirectView, UpdateView
 from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
 from django.urls import reverse_lazy
 from movies.forms import MovieRentForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from accounts.models import AppUser
+from django.utils import timezone
 
 
 class MovieCreateView(LoginRequiredMixin, CreateView):
@@ -50,7 +51,7 @@ class MovieUpdateView(LoginRequiredMixin, UpdateView):
 class MovieRentView(LoginRequiredMixin, RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
-        return reverse_lazy('movies:list')
+        return reverse_lazy('movies:my_list')
 
     def get(self, request, *args, **kwargs):
 
@@ -66,10 +67,33 @@ class MovieRentView(LoginRequiredMixin, RedirectView):
 
         return super().get(request, *args, **kwargs)
 
-# class MovieMyListView(LoginRequiredMixin, ListView):
-#     model = Movie
-#     template_name = "movies/movie_list.html"
 
-#     def get_queryset(self):
-#         user = get_object_or_404
-#         return super().get_queryset().filter(customer=self.request.user)
+class MovieMyListView(LoginRequiredMixin, ListView):
+    model = Rental
+    template_name = "movies/movie_my_list.html"
+
+    def get_queryset(self):
+        customer = get_object_or_404(AppUser, user_id=self.request.user.id)
+        return super().get_queryset().filter(customer=customer).order_by('date_rented')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["returned_list"] = context['rental_list'].filter(
+            date_returned__isnull=False)
+        context["unreturned_list"] = context['rental_list'].filter(
+            date_returned__isnull=True)
+        return context
+
+
+class MovieReturnView(LoginRequiredMixin, RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse_lazy('movies:my_list')
+
+    def get(self, request, *args, **kwargs):
+        rental = Rental.objects.get(pk=self.kwargs.get('pk'))
+
+        rental.date_returned = timezone.now()
+        rental.movie.quantity += 1
+        rental.save()
+
+        return super().get(request, *args, **kwargs)

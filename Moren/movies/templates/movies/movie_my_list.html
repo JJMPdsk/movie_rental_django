@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block body_block %}
+    <h2>My movies</h2>
+    <hr/>
+
+    {% comment %} NIEZWÓRCONE {% endcomment %}
+    <div class="row">
+        <div class="col">
+            <h4>Unreturned</h4>
+            <div class="row row-cols-3">
+                {% for rental in unreturned_list %}
+
+                    {% include "modal_confirm.html" with id=rental.id confirm_url_name='movies:return' confirm_url_parameter=rental.pk %}
+                    <div class="col">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ rental.movie.name }}</h5>
+                                <h6 class="card-subtitle text-muted">{{ rental.movie.genre }}</h6>
+                                <h6 class="card-subtitle text-muted mt-1">Released at: {{ rental.movie.release_date|date:"d E Y" }}</h6>
+                                <hr/>
+                                <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#confirm{{rental.id}}">Return</button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <hr/>
+    {% comment %} ZWRÓCONE {% endcomment %}
+    <div class="row">
+        <div class="col">
+            <h4>Returned</h4>
+            <div class="row row-cols-3">
+                {% for rental in returned_list %}
+                    <div class="col">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ rental.movie.name }}</h5>
+                                <h6 class="card-subtitle text-muted">{{ rental.movie.genre }}</h6>
+                                <h6 class="card-subtitle text-muted mt-1">Released at: {{ rental.movie.release_date|date:"d E Y" }}</h6>
+                                <hr/>
+                                {% comment %} <a href="{% url 'movies:detail' movie.pk %}" class="col-3 card-link btn btn-dark">Details</a> {% endcomment %}
+                                {% comment %} <a href="{% url 'movies:update' movie.pk %}" class="col-3 card-link btn btn-dark">Edit</a> {% endcomment %}
+                                {% comment %} <a href="{% url 'movies:delete' movie.pk %}" class="col-3 card-link btn btn-dark">Delete</a> {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+{% endblock body_block %}

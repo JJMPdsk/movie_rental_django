@@ -1,0 +1,32 @@
+<!-- Modal -->
+<div class="modal fade" id="confirm{{id}}" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <!-- TITLE -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{% if modal_title == None %}Confirm{% else %}{{modal_title}}{% endif %}</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          <span>&times;</span>
+        </button>
+      </div>
+
+      <!-- BODY -->
+      <div class="modal-body">
+      {% if modal_body == None %}Are you sure?{% else %}{{modal_body}}{% endif %}
+      </div>
+
+      <!-- FOOTER -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-link" data-dismiss="modal">{% if cancel_btn_title == None %}Cancel{% else %}{{cancel_btn_title}}{% endif %}</button>
+        <a href="{% url confirm_url_name confirm_url_parameter %}" class="btn btn-dark">{% if confirm_btn_title == None %}Confirm{% else %}{{confirm_btn_title}}{% endif %}</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+    .modal{
+        left: 33%;
+    }
+</style>
