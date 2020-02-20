@@ -31,4 +31,4 @@ class Rental(models.Model):
     customer = models.ForeignKey(AppUser, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Movie: {self.movie.name}, Customer: {self.customer.username}"
+        return f"Movie: {self.movie.name}, Customer: {self.customer.user.username}"
