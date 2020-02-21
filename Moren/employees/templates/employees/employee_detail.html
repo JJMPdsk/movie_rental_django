@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block body_block %}
+<p>id: {{ employee.id }}</p>
+<p>Username: {{ employee.username }}</p>
+<p>Date joined: {{ employee.date_joined|date:"d E Y H:m" }}</p>
+<p>First name: {{ employee.first_name }}</p>
+<p>Last name: {{ employee.last_name }}</p>
+<p>Email: {{ employee.email }}</p>
+
+{% endblock body_block %}

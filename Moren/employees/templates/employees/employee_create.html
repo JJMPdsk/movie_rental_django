@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+
+{% block body_block %}
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <h1>Create employee</h1>
+            <form method="post">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <input class="btn btn-dark" type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+{% endblock body_block %}

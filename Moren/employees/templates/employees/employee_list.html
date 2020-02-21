@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block body_block %}
+
+<h2>Employees</h2>
+<hr/>
+
+<a class="btn btn-dark" href="{% url 'employees:create' %}"><i class="fas fa-user-plus"></i> Create</a>
+
+<div class="row mt-4">
+    {% for employee in employee_list %}
+    {% include "modal_confirm.html" with id=employee.id confirm_url_name='employees:delete' confirm_url_parameter=employee.pk %}
+
+
+    <div class="col-6 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ employee.username }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">joined: {{ employee.date_joined|date:"d E Y H:m"}}</h6>
+                <a class="btn btn-info" href="{% url 'employees:detail' pk=employee.pk %}" class="card-link">Details</a>
+                <button class="btn btn-danger" data-toggle="modal" data-target="#confirm{{employee.id}}"><i class="fas fa-user-minus"></i> Delete</button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock body_block %}
