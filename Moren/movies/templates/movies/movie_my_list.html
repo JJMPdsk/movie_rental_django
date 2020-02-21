@@ -8,11 +8,11 @@
     <div class="row">
         <div class="col">
             <h4>Unreturned</h4>
-            <div class="row row-cols-3">
+            <div class="row">
                 {% for rental in unreturned_list %}
 
                     {% include "modal_confirm.html" with id=rental.id confirm_url_name='movies:return' confirm_url_parameter=rental.pk %}
-                    <div class="col">
+                    <div class="col-4">
                         <div class="card mb-3">
                             <div class="card-body">
                                 <h5 class="card-title">{{ rental.movie.name }}</h5>
@@ -38,9 +38,9 @@
     <div class="row">
         <div class="col">
             <h4>Returned</h4>
-            <div class="row row-cols-3">
+            <div class="row">
                 {% for rental in returned_list %}
-                    <div class="col">
+                    <div class="col-4">
                         <div class="card mb-3">
                             <div class="card-body">
                                 <h5 class="card-title">{{ rental.movie.name }}</h5>
