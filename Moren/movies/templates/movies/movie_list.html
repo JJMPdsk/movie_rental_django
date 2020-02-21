@@ -3,7 +3,9 @@
 {% block body_block %}
     <h2>Movies</h2>
     <hr/>
-    <a class="btn btn-dark" href="{% url 'movies:create' %}">Create</a> <br/>
+    {% if user.groups.all.0.name == 'employee' or user.groups.all.0.name == 'admin' %}
+        <a class="btn btn-dark" href="{% url 'movies:create' %}">Create</a> <br/>
+    {% endif %}
 
     <div class="row">
         <div class="mt-4 col-5">
@@ -15,8 +17,10 @@
                         <h6 class="card-subtitle text-muted mt-1">{{ movie.release_date|date:"d E Y" }}</h6>
                         <hr/>
                         <a href="{% url 'movies:detail' movie.pk %}" class="col-3 card-link btn btn-dark">Details</a>
-                        <a href="{% url 'movies:update' movie.pk %}" class="col-3 card-link btn btn-dark">Edit</a>
-                        <a href="{% url 'movies:delete' movie.pk %}" class="col-3 card-link btn btn-dark">Delete</a>
+                        {% if user.groups.all.0.name == 'employee' or user.groups.all.0.name == 'admin' %}
+                            <a href="{% url 'movies:update' movie.pk %}" class="col-3 card-link btn btn-dark">Edit</a>
+                          <a href="{% url 'movies:delete' movie.pk %}" class="col-3 card-link btn btn-dark">Delete</a>
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}

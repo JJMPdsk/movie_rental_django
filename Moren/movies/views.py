@@ -1,16 +1,25 @@
-from django.shortcuts import render, get_object_or_404
-from movies.models import Movie, Rental, Genre
-from django.views.generic import CreateView, DetailView, ListView, DeleteView, FormView, RedirectView, UpdateView
+from os.path import exists
+
 from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
-from django.urls import reverse_lazy
-from movies.forms import MovieRentForm
-from django.contrib.auth.mixins import LoginRequiredMixin
+from braces.views import GroupRequiredMixin
 from django.contrib import messages
-from accounts.models import AppUser
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404, render
+from django.urls import reverse_lazy
 from django.utils import timezone
+from django.views.generic import (
+    CreateView, DeleteView, DetailView, FormView, ListView, RedirectView,
+    UpdateView)
+
+from accounts.models import AppUser
+from Moren.settings import Roles
+from movies.forms import MovieRentForm
+from movies.models import Genre, Movie, Rental
 
 
-class MovieCreateView(LoginRequiredMixin, CreateView):
+class MovieCreateView(GroupRequiredMixin, CreateView):
+    group_required = [Roles.admin, Roles.employee]
+
     model = Movie
     fields = '__all__'
     template_name = "movies/movie_create.html"
@@ -21,23 +30,27 @@ class MovieCreateView(LoginRequiredMixin, CreateView):
         return form
 
 
-class MovieListView(ListView):
+class MovieListView(LoginRequiredMixin, ListView):
     model = Movie
     template_name = "movies/movie_list.html"
 
 
-class MovieDeleteView(LoginRequiredMixin, DeleteView):
+class MovieDeleteView(GroupRequiredMixin, DeleteView):
+    group_required = [Roles.admin, Roles.employee]
+
     model = Movie
     template_name = "movies/movie_delete.html"
     success_url = reverse_lazy('movies:list')
 
 
-class MovieDetailView(DetailView):
+class MovieDetailView(LoginRequiredMixin, DetailView):
     model = Movie
     template_name = "movies/movie_detail.html"
 
 
-class MovieUpdateView(LoginRequiredMixin, UpdateView):
+class MovieUpdateView(GroupRequiredMixin, UpdateView):
+    group_required = [Roles.admin, Roles.employee]
+
     model = Movie
     fields = '__all__'
     template_name = "movies/movie_update.html"
@@ -48,7 +61,8 @@ class MovieUpdateView(LoginRequiredMixin, UpdateView):
         return form
 
 
-class MovieRentView(LoginRequiredMixin, RedirectView):
+class MovieRentView(GroupRequiredMixin, RedirectView):
+    group_required = Roles.customer
 
     def get_redirect_url(self, *args, **kwargs):
         return reverse_lazy('movies:my_list')
@@ -56,25 +70,31 @@ class MovieRentView(LoginRequiredMixin, RedirectView):
     def get(self, request, *args, **kwargs):
 
         movie = get_object_or_404(Movie, pk=self.kwargs.get('pk'))
+        customer = AppUser.objects.get(user_id=self.request.user.id)
 
-        if movie.quantity > 0:
-            customer = AppUser.objects.get(user_id=self.request.user.id)
-            Rental.objects.create(customer=customer, movie=movie)
-            movie.quantity -= 1
-            movie.save()
+        # check whether customer rents the movie already, which isn't returned
+        if Rental.objects.filter(customer=customer, movie=movie, date_returned__isnull=True).exists():
+            messages.warning(
+                self.request, "You can't rent this movie. Please return it first.")
         else:
-            messages.warning(self.request, "Movie quantity too low")
+            if movie.quantity > 0:
+                Rental.objects.create(customer=customer, movie=movie)
+                movie.quantity -= 1
+                movie.save()
+            else:
+                messages.warning(self.request, "Movie quantity too low")
 
         return super().get(request, *args, **kwargs)
 
 
-class MovieMyListView(LoginRequiredMixin, ListView):
+class MovieMyListView(GroupRequiredMixin, ListView):
+    group_required = Roles.customer
     model = Rental
     template_name = "movies/movie_my_list.html"
 
     def get_queryset(self):
         customer = get_object_or_404(AppUser, user_id=self.request.user.id)
-        return super().get_queryset().filter(customer=customer).order_by('date_rented')
+        return super().get_queryset().filter(customer=customer).order_by('-date_rented')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -85,7 +105,9 @@ class MovieMyListView(LoginRequiredMixin, ListView):
         return context
 
 
-class MovieReturnView(LoginRequiredMixin, RedirectView):
+class MovieReturnView(GroupRequiredMixin, RedirectView):
+    group_required = Roles.customer
+
     def get_redirect_url(self, *args, **kwargs):
         return reverse_lazy('movies:my_list')
 
@@ -94,6 +116,8 @@ class MovieReturnView(LoginRequiredMixin, RedirectView):
 
         rental.date_returned = timezone.now()
         rental.movie.quantity += 1
+
+        rental.movie.save()
         rental.save()
 
         return super().get(request, *args, **kwargs)

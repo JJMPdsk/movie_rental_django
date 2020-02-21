@@ -19,7 +19,12 @@
                                 <h6 class="card-subtitle text-muted">{{ rental.movie.genre }}</h6>
                                 <h6 class="card-subtitle text-muted mt-1">Released at: {{ rental.movie.release_date|date:"d E Y" }}</h6>
                                 <hr/>
+
+                                <h6>Rented at: {{ rental.date_rented|date:"d E Y, H:i" }}</h6>
+                                <hr/>
+
                                 <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#confirm{{rental.id}}">Return</button>
+                                <a href="{% url 'movies:detail' rental.movie.pk %}" class="col-3 card-link btn btn-dark">Details</a>
                             </div>
                         </div>
                     </div>
@@ -42,9 +47,12 @@
                                 <h6 class="card-subtitle text-muted">{{ rental.movie.genre }}</h6>
                                 <h6 class="card-subtitle text-muted mt-1">Released at: {{ rental.movie.release_date|date:"d E Y" }}</h6>
                                 <hr/>
-                                {% comment %} <a href="{% url 'movies:detail' movie.pk %}" class="col-3 card-link btn btn-dark">Details</a> {% endcomment %}
-                                {% comment %} <a href="{% url 'movies:update' movie.pk %}" class="col-3 card-link btn btn-dark">Edit</a> {% endcomment %}
-                                {% comment %} <a href="{% url 'movies:delete' movie.pk %}" class="col-3 card-link btn btn-dark">Delete</a> {% endcomment %}
+
+                                <h6>Rented at: {{ rental.date_rented|date:"d E Y, H:i" }}</h6>
+                                <h6>Returned at: {{ rental.date_returned|date:"d E Y, H:i" }}</h6>
+                                <hr/>
+
+                                <a href="{% url 'movies:detail' rental.movie.pk %}" class="col-3 card-link btn btn-dark">Details</a>
                             </div>
                         </div>
                     </div>

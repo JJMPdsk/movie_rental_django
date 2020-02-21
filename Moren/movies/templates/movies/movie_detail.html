@@ -4,9 +4,12 @@
     <h2>{{ movie.name }}</h2>
     <hr/>
 
-    <a class="btn btn-dark" href="{% url 'movies:update' movie.pk %}">Edit</a>
-    <a class="btn btn-dark" href="{% url 'movies:delete' movie.pk %}">Delete</a>
-    <a class="btn btn-dark" href="{% url 'movies:rent' movie.pk %}">Rent</a>
+    {% if user.groups.all.0.name == 'employee' or user.groups.all.0.name == 'admin' %}
+        <a class="btn btn-dark" href="{% url 'movies:update' movie.pk %}">Edit</a>
+        <a class="btn btn-dark" href="{% url 'movies:delete' movie.pk %}">Delete</a>
+    {% else %}
+        <a class="btn btn-dark" href="{% url 'movies:rent' movie.pk %}">Rent</a>
+    {% endif %}
 
     <div class="mt-4">
         <p>Release date: {{ movie.release_date|date:"d E Y" }}</p>

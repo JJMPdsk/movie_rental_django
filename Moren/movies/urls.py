@@ -8,7 +8,7 @@ urlpatterns = [
     path('<int:pk>', views.MovieDetailView.as_view(), name='detail'),
     path('<int:pk>/edit', views.MovieUpdateView.as_view(), name='update'),
     path('<int:pk>/delete', views.MovieDeleteView.as_view(), name='delete'),
-    path('create/', views.MovieCreateView.as_view(), name='create'),
+    path('create', views.MovieCreateView.as_view(), name='create'),
 
     path('<int:pk>/rent', views.MovieRentView.as_view(), name='rent'),
     path('my', views.MovieMyListView.as_view(), name='my_list'),
