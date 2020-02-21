@@ -11,6 +11,6 @@ urlpatterns = [
     path('create', views.MovieCreateView.as_view(), name='create'),
 
     path('<int:pk>/rent', views.MovieRentView.as_view(), name='rent'),
-    path('my', views.MovieMyListView.as_view(), name='my_list'),
+    path('my/', views.MovieMyListView.as_view(), name='my_list'),
     path('rental/<int:pk>/return', views.MovieReturnView.as_view(), name='return'),
 ]
