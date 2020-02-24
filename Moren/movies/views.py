@@ -13,7 +13,7 @@ from django.views.generic import (
 
 from accounts.models import AppUser
 from Moren.settings import Roles
-from movies.forms import MovieRentForm
+from movies.forms import MovieCreateForm
 from movies.models import Genre, Movie, Rental
 
 
@@ -21,13 +21,8 @@ class MovieCreateView(GroupRequiredMixin, CreateView):
     group_required = [Roles.admin, Roles.employee]
 
     model = Movie
-    fields = '__all__'
+    form_class = MovieCreateForm
     template_name = "movies/movie_create.html"
-
-    def get_form(self):
-        form = super().get_form()
-        form.fields['release_date'].widget = DatePickerInput()
-        return form
 
 
 class MovieListView(LoginRequiredMixin, ListView):

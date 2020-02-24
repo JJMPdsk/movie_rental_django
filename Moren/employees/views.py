@@ -1,10 +1,10 @@
 
 from braces.views import GroupRequiredMixin
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import Group, User
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView, RedirectView
 
