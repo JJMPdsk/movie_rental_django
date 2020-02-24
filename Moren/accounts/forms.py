@@ -7,4 +7,7 @@ from movies.models import Genre, Movie, Rental
 # class EmployeeCreateForm()
 
 
-# class MovieCreateForm(UserCreationForm):
+class MovieCreateForm(UserCreationForm):
+    class Meta:
+        model = Movie
+        fields = "__all__"
