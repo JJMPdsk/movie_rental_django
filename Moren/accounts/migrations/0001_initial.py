@@ -3,6 +3,27 @@
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
+from Moren.settings import Roles
+
+
+def apply_migration(apps, schema_editor):
+    Group = apps.get_model('auth', 'Group')
+    Group.objects.bulk_create([
+        Group(name=Roles.admin),
+        Group(name=Roles.employee),
+        Group(name=Roles.customer),
+    ])
+
+
+def revert_migration(apps, schema_editor):
+    Group = apps.get_model('auth', 'Group')
+    Group.objects.filter(
+        name__in=[
+            Roles.admin,
+            Roles.employee,
+            Roles.customer,
+        ]
+    ).delete()
 
 
 class Migration(migrations.Migration):
@@ -17,8 +38,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='AppUser',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
+                ('user', models.OneToOneField(
+                    on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
+        migrations.RunPython(apply_migration, revert_migration),
     ]
