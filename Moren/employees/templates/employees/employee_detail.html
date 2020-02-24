@@ -1,11 +1,31 @@
 {% extends 'base.html' %}
 
 {% block body_block %}
-<p>id: {{ employee.id }}</p>
-<p>Username: {{ employee.username }}</p>
-<p>Date joined: {{ employee.date_joined|date:"d E Y H:m" }}</p>
-<p>First name: {{ employee.first_name }}</p>
-<p>Last name: {{ employee.last_name }}</p>
-<p>Email: {{ employee.email }}</p>
+
+<div class="row justify-content-center">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ employee.username }}</h5>
+                
+                {% if employee.first_name %}
+                    <p class="card-text text-muted">First name: {{ employee.first_name }}</p>
+                {% endif %}
+
+                {% if employee.last_name %}
+                    <p class="card-text text-muted">Last name: {{ employee.last_name }}</p>
+                {% endif %}
+
+                {% if employee.email %}
+                    <p class="card-text text-muted">Email address: {{ employee.email }}</p>
+                {% endif %}
+
+                <p class="card-text text-muted">Date joined: {{ employee.date_joined|date:"d E Y H:m" }}</p>
+            </div>
+        </div>
+
+        <a href="{% url 'employees:list' %}" class="btn btn-dark my-2"><i class="fas fa-chevron-left"></i> Go back</a>
+    </div>    
+</div>
 
 {% endblock body_block %}

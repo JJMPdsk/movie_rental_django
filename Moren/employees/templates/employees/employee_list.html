@@ -17,7 +17,7 @@
             <div class="card-body">
                 <h5 class="card-title">{{ employee.username }}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">joined: {{ employee.date_joined|date:"d E Y H:m"}}</h6>
-                <a class="btn btn-info" href="{% url 'employees:detail' pk=employee.pk %}" class="card-link">Details</a>
+                <a class="btn btn-info" href="{% url 'employees:detail' pk=employee.pk %}" class="card-link"><i class="fas fa-info"></i> Details</a>
                 <button class="btn btn-danger" data-toggle="modal" data-target="#confirm{{employee.id}}"><i class="fas fa-user-minus"></i> Delete</button>
             </div>
         </div>
