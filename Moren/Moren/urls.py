@@ -18,10 +18,10 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('employees/', include('employees.urls')),
-    path('movies/', include('movies.urls')),
-    path('accounts/', include('accounts.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
+    path('', views.IndexView.as_view(), name='index'),
     path('admin/', admin.site.urls),
-    path('', views.IndexView.as_view(), name='index')
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/', include('accounts.urls')),
+    path('movies/', include('movies.urls')),
+    path('employees/', include('employees.urls')),
 ]

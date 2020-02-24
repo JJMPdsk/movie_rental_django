@@ -33,15 +33,17 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'employees',
-    'movies.apps.MoviesConfig',
-    'accounts.apps.AccountsConfig',
-    'django.contrib.admin',
+    'django.contrib.admin.apps.SimpleAdminConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'accounts',
+    'movies',
+    'employees',
+
     'bootstrap4',
     'bootstrap_datepicker_plus',
 ]
